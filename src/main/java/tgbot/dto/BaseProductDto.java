@@ -1,4 +1,4 @@
-package tgbot.model;
+package tgbot.dto;
 
 import lombok.Getter;
 import lombok.Setter;

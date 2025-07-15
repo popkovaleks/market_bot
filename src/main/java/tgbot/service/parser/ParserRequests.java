@@ -3,7 +3,7 @@ package tgbot.service.parser;
 import feign.Feign;
 import feign.gson.GsonDecoder;
 import tgbot.httpclient.Client;
-import tgbot.model.BaseProductDto;
+import tgbot.dto.BaseProductDto;
 
 import java.util.List;
 

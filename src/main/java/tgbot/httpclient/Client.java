@@ -3,7 +3,7 @@ package tgbot.httpclient;
 
 import feign.Param;
 import feign.RequestLine;
-import tgbot.model.BaseProductDto;
+import tgbot.dto.BaseProductDto;
 
 import java.util.List;
 
