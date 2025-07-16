@@ -41,6 +41,11 @@ public class HibernateUtil {
 
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
+                System.out.println("⚙️ Инициализация HibernateUtil...");
+                System.out.println("📦 URL: " + dotenv.get("DB_URL"));
+
+                System.out.println("✅ SessionFactory initialized");
+                System.out.println("🧪 Registered classes: " + sessionFactory.getMetamodel().getEntities());
             } catch (Exception e) {
                 e.printStackTrace();
             }
