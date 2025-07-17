@@ -32,11 +32,6 @@ public class StartMenu {
                 .text(greetingMessage)
                 .build();
 
-        sendMessage.setReplyMarkup(ReplyKeyboardMarkup
-                .builder()
-                .keyboardRow(new KeyboardRow("Электроника"))
-                .build());
-
         List<InlineKeyboardRow> rows = new ArrayList<>();
 
         CategoryUtil categoryUtil = new CategoryUtil();
