@@ -1,17 +1,20 @@
 package tgbot;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import org.hibernate.Session;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
+import tgbot.config.HibernateConfig;
+import tgbot.model.Category;
 import tgbot.service.CreateCategoryMenu;
-import tgbot.service.ShowProducts;
-import tgbot.util.CategoryUtil;
+import tgbot.repository.CategoryRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static tgbot.service.StartMenu.startMessage;
 
@@ -44,6 +47,19 @@ public class TgBot implements LongPollingSingleThreadUpdateConsumer {
                             throw new RuntimeException(e);
                         }
                         state = "createcategory";
+                    }
+                } else {
+
+                    CategoryRepository categoryRepository = new CategoryRepository();
+                    List<Category> categories = categoryRepository.getAllCategories();
+
+                    List<String> categoryCodes = new ArrayList<>();
+                    for (Category category : categories){
+                        categoryCodes.add(category.getCategoryCode());
+                    }
+
+                    if(categoryCodes.contains(data)){
+                        //TODO: вызвать метод подписки на категорию
                     }
                 }
             } else if (update.hasMessage() && update.getMessage().hasText()) {
@@ -90,8 +106,16 @@ public class TgBot implements LongPollingSingleThreadUpdateConsumer {
                         }
                     }
 
-                    CategoryUtil categoryUtil = new CategoryUtil();
-                    categoryUtil.createCategory(categoryData[0], categoryData[1]);
+                    try(Session session = HibernateConfig.getSessionFactory().openSession()){
+
+                        CategoryRepository categoryRepository = new CategoryRepository();
+                        session.beginTransaction();
+                        categoryRepository.createCategory(session, categoryData[0], categoryData[1]);
+                        session.getTransaction().commit();
+                    } catch (Exception e){
+                    e.printStackTrace();
+                }
+
                     state = "start";
                     SendMessage sendMessage = startMessage(chatId);
                     try {

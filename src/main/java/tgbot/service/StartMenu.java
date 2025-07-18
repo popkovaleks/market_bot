@@ -2,21 +2,14 @@ package tgbot.service;
 
 import com.vdurmont.emoji.EmojiParser;
 import io.github.cdimascio.dotenv.Dotenv;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import tgbot.model.Category;
-import tgbot.util.CategoryUtil;
-import tgbot.util.HibernateUtil;
+import tgbot.repository.CategoryRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class StartMenu {
@@ -34,8 +27,8 @@ public class StartMenu {
 
         List<InlineKeyboardRow> rows = new ArrayList<>();
 
-        CategoryUtil categoryUtil = new CategoryUtil();
-        List<Category> categories = categoryUtil.getAllCategories();
+        CategoryRepository categoryRepository = new CategoryRepository();
+        List<Category> categories = categoryRepository.getAllCategories();
 
         for (Category category : categories){
             String buttonText = category.getButtonLabel();

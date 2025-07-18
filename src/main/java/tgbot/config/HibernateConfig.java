@@ -1,4 +1,4 @@
-package tgbot.util;
+package tgbot.config;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.hibernate.SessionFactory;
@@ -8,10 +8,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import tgbot.model.Category;
 
-import javax.imageio.spi.ServiceRegistry;
 import java.util.Properties;
 
-public class HibernateUtil {
+public class HibernateConfig {
 
     private static Dotenv dotenv = Dotenv.load();
 
@@ -41,7 +40,7 @@ public class HibernateUtil {
 
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
-                System.out.println("⚙️ Инициализация HibernateUtil...");
+                System.out.println("⚙️ Инициализация HibernateConfig...");
                 System.out.println("📦 URL: " + dotenv.get("DB_URL"));
 
                 System.out.println("✅ SessionFactory initialized");
