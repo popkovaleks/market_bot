@@ -8,13 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.Entity;
 
 @Entity
-public class Category {
+public class Subcategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String categoryCode;
+    private String subcategoryCode;
 
     private String buttonLabel;
 
@@ -26,12 +26,12 @@ public class Category {
         this.id = id;
     }
 
-    public String getCategoryCode() {
-        return categoryCode;
+    public String getSubcategoryCode() {
+        return subcategoryCode;
     }
 
-    public void setCategoryCode(String categoryCode) {
-        this.categoryCode = categoryCode;
+    public void setSubcategoryCode(String subcategoryCode) {
+        this.subcategoryCode = subcategoryCode;
     }
 
     public String getButtonLabel() {

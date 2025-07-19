@@ -1,7 +1,7 @@
 package tgbot.service;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import tgbot.dto.BaseProductDto;
+import tgbot.model.dto.BaseProductDto;
 import tgbot.service.parser.ParserRequests;
 
 

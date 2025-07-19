@@ -6,8 +6,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
-import tgbot.model.Category;
-import tgbot.repository.CategoryRepository;
+import tgbot.model.Subcategory;
+import tgbot.repository.SubcategoryRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +27,12 @@ public class StartMenu {
 
         List<InlineKeyboardRow> rows = new ArrayList<>();
 
-        CategoryRepository categoryRepository = new CategoryRepository();
-        List<Category> categories = categoryRepository.getAllCategories();
+        SubcategoryRepository subcategoryRepository = new SubcategoryRepository();
+        List<Subcategory> categories = subcategoryRepository.getAllSubcategories();
 
-        for (Category category : categories){
-            String buttonText = category.getButtonLabel();
-            String callbackData = category.getCategoryCode();
+        for (Subcategory subcategory : categories){
+            String buttonText = subcategory.getButtonLabel();
+            String callbackData = subcategory.getSubcategoryCode();
 
             InlineKeyboardButton button = new InlineKeyboardButton(buttonText);
             button.setCallbackData(callbackData);

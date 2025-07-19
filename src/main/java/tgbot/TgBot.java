@@ -9,9 +9,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import tgbot.config.HibernateConfig;
-import tgbot.model.Category;
+import tgbot.model.Subcategory;
 import tgbot.service.CreateCategoryMenu;
-import tgbot.repository.CategoryRepository;
+import tgbot.repository.SubcategoryRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +50,12 @@ public class TgBot implements LongPollingSingleThreadUpdateConsumer {
                     }
                 } else {
 
-                    CategoryRepository categoryRepository = new CategoryRepository();
-                    List<Category> categories = categoryRepository.getAllCategories();
+                    SubcategoryRepository subcategoryRepository = new SubcategoryRepository();
+                    List<Subcategory> categories = subcategoryRepository.getAllSubcategories();
 
                     List<String> categoryCodes = new ArrayList<>();
-                    for (Category category : categories){
-                        categoryCodes.add(category.getCategoryCode());
+                    for (Subcategory subcategory : categories){
+                        categoryCodes.add(subcategory.getSubcategoryCode());
                     }
 
                     if(categoryCodes.contains(data)){
@@ -108,9 +108,9 @@ public class TgBot implements LongPollingSingleThreadUpdateConsumer {
 
                     try(Session session = HibernateConfig.getSessionFactory().openSession()){
 
-                        CategoryRepository categoryRepository = new CategoryRepository();
+                        SubcategoryRepository subcategoryRepository = new SubcategoryRepository();
                         session.beginTransaction();
-                        categoryRepository.createCategory(session, categoryData[0], categoryData[1]);
+                        subcategoryRepository.createSubcategory(session, categoryData[0], categoryData[1]);
                         session.getTransaction().commit();
                     } catch (Exception e){
                     e.printStackTrace();
