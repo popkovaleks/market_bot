@@ -7,6 +7,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import tgbot.model.Subcategory;
+import tgbot.model.User;
 
 import java.util.Properties;
 
@@ -34,6 +35,7 @@ public class HibernateConfig {
                 configuration.setProperties(settings);
 
                 configuration.addAnnotatedClass(Subcategory.class);
+                configuration.addAnnotatedClass(User.class);
 
                 StandardServiceRegistry  serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();

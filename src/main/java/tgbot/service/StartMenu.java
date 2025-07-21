@@ -32,7 +32,8 @@ public class StartMenu {
 
         for (Subcategory subcategory : categories){
             String buttonText = subcategory.getButtonLabel();
-            String callbackData = subcategory.getSubcategoryCode();
+//            String callbackData = subcategory.getSubcategoryCode();
+            String callbackData = "subcategory:" + subcategory.getId();
 
             InlineKeyboardButton button = new InlineKeyboardButton(buttonText);
             button.setCallbackData(callbackData);

@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import tgbot.config.HibernateConfig;
 import tgbot.model.Subcategory;
+import tgbot.service.CategorySubscriber;
 import tgbot.service.CreateCategoryMenu;
 import tgbot.repository.SubcategoryRepository;
 
@@ -48,18 +49,21 @@ public class TgBot implements LongPollingSingleThreadUpdateConsumer {
                         }
                         state = "createcategory";
                     }
-                } else {
+                } else if (data.matches("^subcategory:\\d+$")) {
 
                     SubcategoryRepository subcategoryRepository = new SubcategoryRepository();
-                    List<Subcategory> categories = subcategoryRepository.getAllSubcategories();
+                    List<Subcategory> subcategories = subcategoryRepository.getAllSubcategories();
 
-                    List<String> categoryCodes = new ArrayList<>();
-                    for (Subcategory subcategory : categories){
-                        categoryCodes.add(subcategory.getSubcategoryCode());
+                    List<Long> subcategoryIds = new ArrayList<>();
+                    for (Subcategory subcategory : subcategories){
+                        subcategoryIds.add(subcategory.getId());
                     }
 
-                    if(categoryCodes.contains(data)){
+                    long commandSubcategoryId = Long.parseLong(data.split(":")[1]);
+                    if(subcategoryIds.contains(commandSubcategoryId)){
                         //TODO: вызвать метод подписки на категорию
+                        CategorySubscriber categorySubscriber = new CategorySubscriber();
+                        categorySubscriber.subscribe(chatId, commandSubcategoryId);
                     }
                 }
             } else if (update.hasMessage() && update.getMessage().hasText()) {
