@@ -18,6 +18,10 @@ public class SubcategoryRepository {
 
     }
 
+    public void update(Session session, Subcategory subcategory){
+        session.merge(subcategory);
+    }
+
     public void save(Session session, Subcategory subcategory){
         session.save(subcategory);
     }

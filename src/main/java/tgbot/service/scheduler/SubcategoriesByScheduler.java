@@ -9,6 +9,7 @@ import tgbot.repository.SubcategoryRepository;
 import tgbot.service.parser.ParserRequests;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SubcategoriesByScheduler implements Runnable{
 
@@ -25,6 +26,8 @@ public class SubcategoriesByScheduler implements Runnable{
 
         List<SubcategoryFromParserDto> subcategories = parserRequests.getSubcategoriesByCategory(category);
 
+        List<Long> newIds = subcategories.stream().map(SubcategoryFromParserDto::getId).collect(Collectors.toList());
+
         SubcategoryMapper mapper = new SubcategoryMapper();
 
         SubcategoryRepository subcategoryRepository = new SubcategoryRepository();
@@ -32,12 +35,23 @@ public class SubcategoriesByScheduler implements Runnable{
         try(Session session = HibernateConfig.getSessionFactory().openSession()) {
             session.beginTransaction();
             System.out.println("Открыл транзакцию");
+
             try {
-                session.createQuery("DELETE FROM Subcategory").executeUpdate();
-                for (SubcategoryFromParserDto subcategory : subcategories) {
-                    subcategoryRepository.save(session, mapper.toEntity(subcategory));
+
+                for (SubcategoryFromParserDto subcategoryDto : subcategories) {
+                    Subcategory subcategory = session.find(Subcategory.class, subcategoryDto.getId());
+
+                    if (subcategory != null){
+                        subcategoryRepository.update(session, mapper.toEntity(subcategoryDto));
+                    } else {
+                        subcategoryRepository.save(session, mapper.toEntity(subcategoryDto));
+                    }
 
                 }
+
+                session.createQuery("DELETE FROM Subcategory s where s.id NOT IN (:ids)")
+                        .setParameter("ids", newIds)
+                        .executeUpdate();
 
                 session.getTransaction().commit();
 

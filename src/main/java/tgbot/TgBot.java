@@ -61,9 +61,23 @@ public class TgBot implements LongPollingSingleThreadUpdateConsumer {
 
                     long commandSubcategoryId = Long.parseLong(data.split(":")[1]);
                     if(subcategoryIds.contains(commandSubcategoryId)){
-                        //TODO: вызвать метод подписки на категорию
+
                         CategorySubscriber categorySubscriber = new CategorySubscriber();
-                        categorySubscriber.subscribe(chatId, commandSubcategoryId);
+                        int status = categorySubscriber.subscribe(chatId, commandSubcategoryId);
+
+                        if (status == 0){
+                            try {
+                                tgClient.execute(categorySubscriber.successfulMessage(chatId));
+                            } catch (TelegramApiException e){
+                                throw new RuntimeException();
+                            }
+                        } else {
+                            try {
+                                tgClient.execute(categorySubscriber.errorMessage(chatId));
+                            } catch (TelegramApiException e){
+                                throw new RuntimeException();
+                            }
+                        }
                     }
                 }
             } else if (update.hasMessage() && update.getMessage().hasText()) {
